@@ -246,6 +246,7 @@ public class Couriers {
 
     @PostMapping(value = "/box/rent")
     public Result<List<ExpressCabinet>, String> boxRent(@RequestBody JSONObject data) {
+
         String token = data.getString("token");
         Long boxId = data.getLong("boxId");
         Date finishTime = data.getDate("finishTime");
@@ -316,6 +317,7 @@ public class Couriers {
         }
         List<ExpressSendOrder> expressSendOrders = expressSendOrderDAO.findByCourier_IdAndStatus(id,2);
 
+
         return new Result<List<ExpressSendOrder>, String>().setStatus(200).setMsg("获取快递成功").setData(expressSendOrders);
     }
 
@@ -344,5 +346,43 @@ public class Couriers {
         }
         TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         return new Result<String,String>().setStatus(400).setMsg("取件失败");
+    }
+
+    @RequestMapping(value = "/pick")
+    @Transactional
+    public Result<String ,String> pick(@RequestBody JSONObject jsonObject){
+        String token = jsonObject.getString("token");
+        Long id = TokenService.validateTokenUser(token);
+        if (id<=0){
+            return new Result<String, String>().setStatus(400).setMsg("登录凭证无效或过期");
+        }
+        Long send_id = jsonObject.getLong("express_send_id");
+        Optional<ExpressSendOrder> expressSendOrder = expressSendOrderDAO.findById(send_id);
+
+        if (!expressSendOrder.isPresent()){
+            return new Result<String, String>().setStatus(400).setMsg("快递不存在");
+        }
+
+        if (expressSendOrder.get().getStatus()!=2){
+            return new Result<String, String>().setStatus(400).setMsg("该订单您尚未付款");
+        }
+
+        if (expressSendOrder.get().getIsSave()==0){
+            return new Result<String, String>().setStatus(400).setMsg("客户尚未存件，无法取件");
+        }
+
+        expressSendOrder.get().getExpress().getBox().setIsUsing(0);
+
+        expressBoxDAO.save(expressSendOrder.get().getExpress().getBox());
+
+        expressSendOrder.get().setCode(0);
+
+        expressSendOrderDAO.save(expressSendOrder.get());
+
+        String msg = "您的订单 "+expressSendOrder.get().getOrderNo()+ "快递员已取件。稍后降为您发出。";
+        rabbitMQService.sendExpressNotify(expressSendOrder.get().getCustomer().getPhone(),new Result<>().setMsg(msg));
+        return new Result<String,String>().setStatus(200).setMsg("取件成功");
+
+
     }
 }

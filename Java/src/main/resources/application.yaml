@@ -1,7 +1,7 @@
 
 spring:
   rabbitmq:
-    addresses: 118.178.195.221
+    addresses: 127.0.0.1
     port: 5672
     username: guest
     password: guest
@@ -21,7 +21,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     rest:
-
       base-path: /api
   jpa:
     hibernate:

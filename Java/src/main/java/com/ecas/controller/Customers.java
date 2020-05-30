@@ -322,4 +322,61 @@ public class Customers {
 
     }
 
+    @RequestMapping(value = "/pick")
+    @Transactional
+    public Result<String,String> pick(@RequestBody JSONObject jsonObject){
+        String token = jsonObject.getString("token");
+        Long id = TokenService.validateTokenUser(token);
+        if (id<=0){
+            return new Result<String, String>().setStatus(400).setMsg("登录凭证无效或过期");
+        }
+        Long send_id = jsonObject.getLong("send_express_id");
+        Optional<CourierSendExpress> courierSendExpress = courierSendExpressDAO.findById(send_id);
+
+        if (!courierSendExpress.isPresent()){
+            return new Result<String, String>().setStatus(400).setMsg("快递不存在");
+        }
+
+        courierSendExpress.get().setIsPick(1);
+
+        courierSendExpress.get().getBox().setIsUsing(0);
+
+        courierSendExpressDAO.save(courierSendExpress.get());
+
+        expressBoxDAO.save(courierSendExpress.get().getBox());
+
+        return new Result<String, String>().setStatus(200).setMsg("取件成功");
+    }
+
+    @RequestMapping(value = "/save")
+
+    public Result<String,String>Save(@RequestBody  JSONObject jsonObject){
+        String token = jsonObject.getString("token");
+        Long id = TokenService.validateTokenUser(token);
+        if (id<=0){
+            return new Result<String, String>().setStatus(400).setMsg("登录凭证无效或过期");
+        }
+        Long express_id = jsonObject.getLong("express_send_id");
+        Optional<ExpressSendOrder> expressSendOrder1 = expressSendOrderDAO.findById(express_id);
+        if (!expressSendOrder1.isPresent()){
+            return new Result<String , String>().setMsg("开柜失败，您提供的信息有误").setStatus(400);
+        }
+        ExpressSendOrder expressSendOrder = expressSendOrder1.get();
+        if (expressSendOrder.getIsSave()==1){
+            return new Result<String , String>().setMsg("您已经存件");
+        }
+        Random random = new Random();
+        int code1 = random.nextInt(8999) + 1000;
+//            String code = Integer.toString(radn);
+        expressSendOrder.setCode(code1);
+        expressSendOrder.setIsSave(1);
+        expressSendOrderDAO.save(expressSendOrder);
+        String resStr = "您的订单"+expressSendOrder.getOrderNo()+" 客户已存储物品，请及时提取，"+ expressSendOrder.getExpress().getBox().getCabinet().getAddress() +
+                " " + expressSendOrder.getExpress().getBox().getCabinet().getName() + "快递柜 " +
+                expressSendOrder.getExpress().getBox().getName() + "箱,取货码："+code1+"(仅一次有效)";
+        rabbitMQService.sendExpressNotify(expressSendOrder.getCourier().getPhone(),new Result<ExpressSendOrder,String>().setMsg(resStr).setData(expressSendOrder));
+        return new Result<String,String>().setMsg(resStr).setStatus(200);
+
+    }
+
 }

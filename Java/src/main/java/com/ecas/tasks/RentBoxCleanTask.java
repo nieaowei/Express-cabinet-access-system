@@ -51,8 +51,9 @@ public class RentBoxCleanTask {
         List<CourierRentBox> courierRentBoxes  = courierRentBoxDAO.findByFinishTimeBeforeAndFinishFlag(date,0);
         for (CourierRentBox courierRentBox:courierRentBoxes) {
             courierRentBox.setFinishFlag(1);
-            courierRentBox.getExpressBox().setIsUsing(0);
-            expressBoxDAO.save(courierRentBox.getExpressBox());
+            courierRentBox.getBox().setIsUsing(0);
+//            courierRentBox.getExpressBox().setIsUsing(0);
+            expressBoxDAO.save(courierRentBox.getBox());
         }
         courierRentBoxDAO.saveAll(courierRentBoxes);
     }

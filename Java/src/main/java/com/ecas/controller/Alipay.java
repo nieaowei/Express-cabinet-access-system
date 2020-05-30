@@ -36,6 +36,7 @@ public class Alipay {
     @PostMapping(value = "/pay/callback")
     @Transactional
     public Result<Boolean, List<ObjectError>> callback(HttpServletRequest request) {
+        System.out.println("支付宝回调");
         String res = request.getParameter("trade_status");
         String orderNO = request.getParameter("out_trade_no");
         ExpressSendOrder expressSendOrder = expressSendOrderDAO.findByOrderNo(orderNO);
