@@ -81,7 +81,7 @@ else
 fi
 
 
-if tar zxvf mysqdata.tgz -C /usr/local/data
+if tar zxvf mysqldata.tgz -C /usr/local
 then
 	echo "The dir is made."
 else
@@ -89,7 +89,7 @@ else
 	exit 3
 fi
 
-if run --name mysql5728 --net=host -v /usr/local/data:/var/lib/mysql -d mysql:5.7.28
+if docker run --name mysql5728 --net=host -v /usr/local/mysqldata:/var/lib/mysql -d mysql:5.7.28
 then
 	echo "The image of mysql is running."
 else
