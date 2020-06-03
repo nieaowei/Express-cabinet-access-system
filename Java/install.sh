@@ -90,7 +90,7 @@ else
 	exit 3
 fi
 
-if docker run  --net=host -d nieaowei/ecas
+if docker run --name ecas --net=host -d nieaowei/ecas
 then
 	echo "The images is running."
 else
