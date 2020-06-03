@@ -2,7 +2,7 @@ FROM maven:3.6.3-jdk-8
 
 RUN mkdir /usr/local/ecas
 
-ADD . /usr/local/ecas
+ADD ./Java /usr/local/ecas
 
 WORKDIR /usr/local/ecas
 
