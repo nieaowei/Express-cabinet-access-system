@@ -1,5 +1,5 @@
-create schema if not exists ecas collate latin1_swedish_ci;
-
+create schema if not exists ecas collate utf8_bin;
+use ecas;
 create table if not exists customer_ord
 (
     id int auto_increment
