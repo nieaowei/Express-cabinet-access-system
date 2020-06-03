@@ -48,14 +48,6 @@ else
 	echo "The Docker autonal start seting is faild."
 fi
 
-if docker --registry-mirror=https://9cpn8tt6.mirror.aliyuncs.com daemon
-then
-	echo "The image of rabbitmq is pull."
-else
-	echo "The image of rabbitmq pulling is faild.Your network is probrably faild."
-	exit 3
-fi
-
 if docker pull rabbitmq
 then
 	echo "The image of rabbitmq is pull."
