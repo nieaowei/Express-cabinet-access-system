@@ -22,7 +22,7 @@ else
 	exit 3
 fi
 
-if mv daemon /etc/docker
+if mv daemon.json /etc/docker
 then
 	echo "The dir is made."
 else
