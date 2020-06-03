@@ -32,7 +32,7 @@ else
 	echo "The Docker autonal start seting is faild."
 fi
 
-if docker pull registry.docker-cn.com/rabbitmq
+if docker pull 9cpn8tt6.mirror.aliyuncs.com/library/rabbitmq
 then
 	echo "The image of rabbitmq is pull."
 else
@@ -48,7 +48,7 @@ else
 	exit 4
 fi
 
-if docker pull registry.docker-cn.com/mysql:5.7.28
+if docker pull 9cpn8tt6.mirror.aliyuncs.com/library/mysql:5.7.28
 then
 	echo "The image of mysql is pull."
 else
@@ -82,7 +82,7 @@ else
 fi
 
 
-if docker pull registry.docker-cn.com/nieaowei/ecas
+if docker pull 9cpn8tt6.mirror.aliyuncs.com/nieaowei/ecas
 then
 	echo "The image is pull."
 else
