@@ -56,7 +56,7 @@ else
 	exit 3
 fi
 
-if wget https://raw.githubusercontent.com/nieaowei/Express-cabinet-access-system/master/mysqldata.tgz
+if wget https://raw.githubusercontent.com/nieaowei/Express-cabinet-access-system/master/Java/mysqldata.tgz
 then
 	echo "The dir is made."
 else
