@@ -40,7 +40,7 @@ else
 	exit 3
 fi
 
-if docker run --name --net=host rabbitmq -d rabbitmq
+if docker run --name rabbitmq --net=host rabbitmq -d rabbitmq
 then
 	echo "The image of rabbitmq is running."
 else
