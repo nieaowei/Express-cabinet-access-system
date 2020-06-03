@@ -14,6 +14,22 @@ else
 	exit 1
 fi
 
+if wget https://raw.githubusercontent.com/nieaowei/Express-cabinet-access-system/master/Java/daemon.json
+then
+	echo "The dir is made."
+else
+	echo "The dir is to make faild."
+	exit 3
+fi
+
+if mv daemon /etc/docker
+then
+	echo "The dir is made."
+else
+	echo "The dir is to make faild."
+	exit 3
+fi
+
 if systemctl status docker | grep "running"
 then
 	echo "The Docker is running."
