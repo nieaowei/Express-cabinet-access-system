@@ -223,3 +223,5 @@ INSERT INTO ecas.express_box (id, name, cabinet_id, size, is_using) VALUES (12, 
 INSERT INTO ecas.express_box (id, name, cabinet_id, size, is_using) VALUES (13, '3-03', 3, 0, 0);
 INSERT INTO ecas.express_box (id, name, cabinet_id, size, is_using) VALUES (14, '3-04', 3, 2, 0);
 INSERT INTO ecas.express_box (id, name, cabinet_id, size, is_using) VALUES (15, '3-05', 3, 1, 0);
+
+INSERT INTO ecas.hibernate_sequence values(1);
